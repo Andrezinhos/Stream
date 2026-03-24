@@ -3,13 +3,13 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-
+    
     InputAction move;
     Rigidbody2D rb;
     public float speed = 5;
 
     void Start()
-    {
+    { 
         rb = GetComponent<Rigidbody2D>();
         move = InputSystem.actions.FindAction("Move");
     }
@@ -26,6 +26,9 @@ public class Player : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Acess"))
+        {
+
+        }
         Debug.Log("Entrou na area");
     }
 }
