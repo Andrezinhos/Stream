@@ -3,8 +3,8 @@ guid: c577999e427146949ae15ff3f3e9b8ea
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 78730522343984979
-    second: tela_0
+      213: -7602595683727539644
+    second: Tela_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 0
   alignment: 0
@@ -126,7 +126,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: tela_0
+      name: Tela_0
       rect:
         serializedVersion: 2
         x: 0
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 35f4b413ef4b71100800000000000000
-      internalID: 78730522343984979
+      spriteID: 442808481872e7690800000000000000
+      internalID: -7602595683727539644
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      tela_0: 78730522343984979
+      Tela_0: -7602595683727539644
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
