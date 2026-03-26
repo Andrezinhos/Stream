@@ -1,22 +1,22 @@
 using System.Collections;
 using UnityEngine;
 
-public class Backdoor : MonoBehaviour
+public class Exposed : MonoBehaviour
 {
     public int timeMax = 20;
     public static bool isActive;
     bool hasPlayer;
-    Coroutine backdoor;
+    Coroutine exposed;
 
     public void Initialized()
     {
-        if (backdoor != null) return;
-        backdoor = StartCoroutine(EventBackdoor());
+        if (exposed != null) return;
+        exposed = StartCoroutine(EventBackdoor());
     }
 
     private void OnEnable()
     {
-        GameManager.OnBackdoor += CanRun;
+        GameManager.OnExposed += CanRun;
     }
 
     void CanRun()

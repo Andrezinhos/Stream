@@ -2,9 +2,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using TMPro;
-using UnityEngine.UI;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 
 public enum Tag { Entertainment, Education, Tecnology }
 public enum Type { Image, Video, Text }
@@ -15,17 +12,25 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI tagText;
     public TextMeshProUGUI typeText;
     public TextMeshProUGUI selecText;
+    public TextMeshProUGUI trendText;
+    public TextMeshProUGUI vigilText;
+    public TextMeshProUGUI repText;
     public int vigil;
     public int rep;
     public Tag content;
     public Type type;
     public List<Content> contents = new List<Content>();
     public InputAction interact;
+    public static event System.Action OnBackdoor;
+    public static event System.Action OnExposed;
 
-    bool isAccept; 
+    bool isBackdoorActive; 
+    bool isExposedActive; 
+    bool canUseData; 
+    bool canUseServer; 
     int totalSelected = 0;
-    int correctSelec = 0;
-    int wrongSelec = 0;
+    public int correctSelec = 0;
+    public int wrongSelec = 0;
     List<Content> selected = new List<Content>();
 
     public static GameManager instance;
@@ -37,120 +42,22 @@ public class GameManager : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else
-        {
-            Destroy(gameObject);
-        }
+        else Destroy(gameObject);
     }
 
     private void Start()
     {
         vigil = 0;
         rep = 0;
+        vigilText.text = vigil.ToString();
+        repText.text = rep.ToString();
+        isBackdoorActive = false;
+        isExposedActive = false;
+        canUseData = false;
+        canUseServer = false;
         interact = InputSystem.actions.FindAction("Interact");
 
-
-        // ENTRETENIMENTO
-        contents.Add(new Content
-        {
-            title = "Meme de Gatos",
-            tag = Tag.Entertainment,
-            type = Type.Image,
-        });
-        contents.Add(new Content
-        {
-            title = "Cartaz de Filme",
-            tag = Tag.Entertainment,
-            type = Type.Image,
-        });
-        contents.Add(new Content
-        {
-            title = "Foto de Férias",
-            tag = Tag.Entertainment,
-            type = Type.Image,
-        });
-        contents.Add(new Content
-        {
-            title = "Post de Lifestyle",
-            tag = Tag.Entertainment,
-            type = Type.Text,
-        });
-        contents.Add(new Content
-        {
-            title = "Trecho de Filme",
-            tag = Tag.Entertainment,
-            type = Type.Video,
-        });
-        contents.Add(new Content
-        {
-            title = "Video Curto",
-            tag = Tag.Entertainment,
-            type = Type.Video,
-        });
-        contents.Add(new Content
-        {
-            title = "Video clipe Musical",
-            tag = Tag.Entertainment,
-            type = Type.Video,
-        });
-
-        //EDUCATION
-        contents.Add(new Content
-        {
-            title = "Mapa Mental",
-            tag = Tag.Education,
-            type = Type.Image
-        });
-        contents.Add(new Content
-        {
-            title = "Mapa Mental",
-            tag = Tag.Education,
-            type = Type.Image
-        });
-        contents.Add(new Content
-        {
-            title = "Aula Matemática",
-            tag = Tag.Education,
-            type = Type.Video,
-        });
-        contents.Add(new Content
-        {
-            title = "Curiosidade Histórica",
-            tag = Tag.Education,
-            type = Type.Video,
-        });
-        contents.Add(new Content
-        {
-            title = "Pesquisa Universitária",
-            tag = Tag.Education,
-            type = Type.Text,
-        });
-
-        //TECNOLOGIA
-        contents.Add(new Content
-        {
-            title = "Curso de Programação",
-            tag = Tag.Tecnology,
-            type = Type.Video,
-        });
-        contents.Add(new Content
-        {
-            title = "Evolução dos Gráficos",
-            tag = Tag.Tecnology,
-            type = Type.Video,
-        });
-        contents.Add(new Content
-        {
-            title = "Código Aberto",
-            tag = Tag.Tecnology,
-            type = Type.Text,
-        });
-        contents.Add(new Content
-        {
-            title = "Código Aberto",
-            tag = Tag.Tecnology,
-            type = Type.Text,
-        });
+        contents = ContentsBase.GetContents();
 
         GetTrend();
         RandomContent(3);
@@ -182,35 +89,87 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void CheckContent()
-    {
-        foreach(Content c in selected)
-        {
-            if (c.tag == content && c.type == type) correctSelec++;
-            else wrongSelec++;
-            Debug.Log(correctSelec);
-        }
-    }
-
     public void ButtonAccept()
     {
+        if (totalSelected == 5)
+        {
+            canUseData = true;
+            return;
+        }
         selected.Add(currOption);
-        foreach (var c in selected) Debug.Log($"{c.title} - {c.tag} - {c.type}");
         totalSelected += 1;
-        selecText.text = totalSelected.ToString();  
+        selecText.text = totalSelected.ToString();
         RandomContent(3);
     }
 
-    void Update()
+    public void ButtonReject()
     {
-        
+        if (totalSelected == 5)
+        {
+            canUseData = true;
+            canUseServer = false;
+            return;
+        }
+        RandomContent(3);
     }
 
+    bool isCorrect;
+    public void ValidateChoice()
+    {
+        foreach (Content c in selected)
+        {
+            if (c.tag == content && c.type == type)
+            {
+                isCorrect = true;
+                if (isExposedActive) Vigil();
+            }
+            else
+            {
+                isCorrect = false;
+                if (isBackdoorActive) Vigil();
+            }
+
+        }
+        if (isCorrect) correctSelec++;
+        else wrongSelec++;
+
+        vigilText.text = vigil.ToString();
+        repText.text = rep.ToString();
+
+        canUseServer = true;
+    }
+    void Vigil()
+    {
+        if (!isBackdoorActive) return;
+        else
+        {
+            vigil++;
+            Debug.Log("Vigil: " + vigil);
+        }
+    }
+
+    public void SendToServer()
+    {
+        if (!canUseServer) return;
+        Invoke("GetTrend", 1.0f);
+    }
+    public void SendToData()
+    {
+        if (!canUseData) return;
+        Invoke("ValidateChoice", 1.0f);
+    }
     void GetTrend()
     {
         content = (Tag)Random.Range(0, System.Enum.GetValues(typeof(Tag)).Length);
         type = (Type)Random.Range(0, System.Enum.GetValues(typeof(Type)).Length);
 
-        //Debug.Log($"Training: {type} of content {content}");
+        selected.Clear();
+        totalSelected = 0;
+        selecText.text = totalSelected.ToString();
+
+        if (wrongSelec >= 3) OnBackdoor?.Invoke();
+        else if (correctSelec >= 5) OnExposed?.Invoke();
+
+        trendText.text = "Training: " + type + " | Content: " + content;
     }
 }
