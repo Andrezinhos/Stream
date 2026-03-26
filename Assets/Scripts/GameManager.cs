@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI trendText;
     public TextMeshProUGUI vigilText;
     public TextMeshProUGUI repText;
+    public GameObject panel;
     public int vigil;
     public int rep;
     public Tag content;
@@ -58,7 +59,8 @@ public class GameManager : MonoBehaviour
         interact = InputSystem.actions.FindAction("Interact");
 
         contents = ContentsBase.GetContents();
-
+        panel = GetComponent<GameObject>();
+        panel.SetActive(false);
         GetTrend();
         RandomContent(3);
     }
