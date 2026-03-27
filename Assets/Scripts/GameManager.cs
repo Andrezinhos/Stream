@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         vigil = 0;
-        rep = 0;
+        rep = 50;
         vigilText.text = vigil.ToString();
         repText.text = rep.ToString();
         isBackdoorActive = false;
@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviour
 
     public void ButtonAccept()
     {
-        if (totalSelected == 5)
+        if (totalSelected == 3)
         {
             canUseData = true;
             return;
@@ -144,7 +144,7 @@ public class GameManager : MonoBehaviour
         if (!isBackdoorActive) return;
         else
         {
-            vigil++;
+            vigil += 5;
             Debug.Log("Vigil: " + vigil);
         }
     }
@@ -170,6 +170,8 @@ public class GameManager : MonoBehaviour
 
         if (wrongSelec >= 3) OnBackdoor?.Invoke();
         else if (correctSelec >= 5) OnExposed?.Invoke();
+        canUseData = false;
+        canUseServer = false;
 
         trendText.text = "Training: " + type + " | Content: " + content;
     }

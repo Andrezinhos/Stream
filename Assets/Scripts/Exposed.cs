@@ -30,6 +30,10 @@ public class Exposed : MonoBehaviour
         {
             Initialized();
         }
+        else
+        {
+            StopCoroutine(exposed);
+        }
     }
 
     public IEnumerator EventBackdoor()

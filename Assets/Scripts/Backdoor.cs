@@ -29,6 +29,10 @@ public class Backdoor : MonoBehaviour
         {
             Initialized();
         }
+        else
+        {
+            StopCoroutine(backdoor);
+        }
     }
 
     public IEnumerator EventBackdoor()
