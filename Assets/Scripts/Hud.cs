@@ -17,11 +17,16 @@ public class Hud: MonoBehaviour
     }
     void Start()
     {
-        startar.onClick.AddListener(() =>
-        {
+        apagar();
+    }
+
+    public void apagar()
+    {
+         startar.onClick.AddListener(() =>
+         {
             StartCoroutine(FadeOut());
             SceneManager.LoadScene("Jogo");
-        });
+         });
 
 
     }
@@ -36,6 +41,20 @@ public class Hud: MonoBehaviour
             yield return null;
         }
         cg.alpha = 0;
+        callback?.Invoke();
+    }
+
+    public IEnumerator FadeIn(Action callback = null)
+    {
+        cg.alpha = 0;
+        cg.blocksRaycasts = true;
+        cg.interactable = true;
+        while (cg.alpha > 1)
+        {
+            cg.alpha -= Time.deltaTime;
+            yield return null;
+        }
+        cg.alpha = 1;
         callback?.Invoke();
     }
 }

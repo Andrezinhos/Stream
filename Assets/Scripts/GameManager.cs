@@ -146,6 +146,11 @@ public class GameManager : MonoBehaviour
         {
             vigil += 5;
             Debug.Log("Vigil: " + vigil);
+
+            if (vigil >= 50)
+            {
+                Hud.instance.
+            }
         }
     }
 
