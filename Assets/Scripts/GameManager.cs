@@ -59,7 +59,6 @@ public class GameManager : MonoBehaviour
         interact = InputSystem.actions.FindAction("Interact");
 
         contents = ContentsBase.GetContents();
-        panel = GetComponent<GameObject>();
         panel.SetActive(false);
         GetTrend();
         RandomContent(3);
