@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
@@ -58,6 +57,15 @@ public class Player : MonoBehaviour
         if (collision.CompareTag("Acess"))
         {
             GameManager.instance.panel.SetActive(true);
+        }
+        Debug.Log("Entrou na area");
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Acess"))
+        {
+            GameManager.instance.panel.SetActive(false);
         }
         Debug.Log("Entrou na area");
     }

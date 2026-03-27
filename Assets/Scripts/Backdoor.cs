@@ -5,7 +5,6 @@ public class Backdoor : MonoBehaviour
 {
     public int timeMax = 20;
     public static bool isActive;
-    bool hasPlayer;
     Coroutine backdoor;
 
     public void Initialized()
