@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 public class Hud: MonoBehaviour
 {
     public CanvasGroup cg;
@@ -19,7 +20,10 @@ public class Hud: MonoBehaviour
         startar.onClick.AddListener(() =>
         {
             StartCoroutine(FadeOut());
+            SceneManager.LoadScene("Jogo");
         });
+
+
     }
     public IEnumerator FadeOut(Action callback = null)
     {
