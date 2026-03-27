@@ -3,12 +3,17 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-public class HudControler : MonoBehaviour
+public class Hud: MonoBehaviour
 {
     public CanvasGroup cg;
     public Button startar;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public static Hud instance;
+
+    public void Awake()
+    {
+        instance = this;
+    }
     void Start()
     {
         startar.onClick.AddListener(() =>
